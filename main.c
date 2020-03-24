@@ -14,16 +14,18 @@ s32 main(void){
 
 
 	while(1){
-	TakeUserInput();		//Take ADC and upper and lower level inputs
+		TakeUserInput();		//Take ADC and upper and lower level inputs
 
-	Scaling();				//Scale ADC to percentage
+	if(flag==false){
+		Scaling();				//Scale ADC to percentage
 
-	if(ApplyHysterysis==false){
-		Alarm();				//Apply Alarm
-	}else if(ApplyHysterysis==true){
-		Hysterysis();			//Apply Hysterysis if applicable
-	}
+		if(ApplyHysterysis==false){
+			Alarm();				//Apply Alarm
+		}else if(ApplyHysterysis==true){
+			Hysterysis();			//Apply Hysterysis if applicable
+		}
 	
+		}
 	}
 
 	return 0;

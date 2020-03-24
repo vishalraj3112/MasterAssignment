@@ -38,7 +38,7 @@ void Hysterysis(void);
 extern s16 AdcInput,O2Conc,UpperLimit,LowerLimit;
 extern bool flag;
 extern bool ApplyHysterysis;
-extern s32 Status;
+extern u1 Status;
 
 
 #endif

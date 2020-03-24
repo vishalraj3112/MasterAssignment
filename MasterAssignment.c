@@ -14,7 +14,7 @@
 s16 AdcInput,O2Conc,UpperLimit,LowerLimit;
 bool flag=true;
 bool ApplyHysterysis=false;
-s32 Status;
+u1 Status;
 
 //###Explanation: First the buffer size and the first elements of the buffer is taken from user
 
@@ -40,13 +40,18 @@ void TakeUserInput(void){
 	printf("Enter lower limit upper range:\n");
 	scanf("%hd",&LowerLimit);
 
-	// if((AdcInput>ADCMAX) || (AdcInput < ADCMIN) || (UpperLimit >O2MAX) || (LowerLimit<O2MIN) || (UpperLimit<UPPERLIMITMIN) ||(LowerLimit>LOWERLIMITMAX)){
-	// 	printf("Wrong Input\n");
-	// 	flag=true;
-	// }
-	// else{
-	// 	flag=false;
-	// }
+	//Wrong input handling-if user inputs values out of range
+	if(flag==true){
+
+	if((AdcInput>ADCMAX) || (AdcInput < ADCMIN) || (UpperLimit >O2MAX) || (LowerLimit<O2MIN) || (UpperLimit<UPPERLIMITMIN) ||(LowerLimit>LOWERLIMITMAX)){
+		printf("Wrong Input\n");
+		flag=true;
+	}
+	else{
+		flag=false;
+	}
+
+	}
 
 }//Take User Input
 
@@ -115,7 +120,7 @@ void Alarm(void){
 
 
 
-	printf("Status:%ld\n",Status);
+	printf("Status:%d\n",Status);
 	printf("ApplyHysterysis:%d\n",ApplyHysterysis);
 	printf("-------------------------------------------\n");
 }//Alarm()
@@ -154,7 +159,7 @@ void Hysterysis(void){
 		printf("Status:--NORMAL--\n");
 	}
 
-	printf("Status:%ld\n",Status);
+	printf("Status:%d\n",Status);
 	printf("ApplyHysterysis:%d\n",ApplyHysterysis);
 	printf("-----------------------------------------\n");
 

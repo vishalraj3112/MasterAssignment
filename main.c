@@ -12,17 +12,21 @@
 
 s32 main(void){
 
+	Lock.flag=true;				//has to be defined inside a function
+	Lock.ApplyHysterysis=false; //has to be defined inside a function
 
 	while(1){
 		TakeUserInput();		//Take ADC and upper and lower level inputs
 
-	if(flag==false){
+	if(Lock.flag==false){
 		Scaling();				//Scale ADC to percentage
 
-		if(ApplyHysterysis==false){
+		if(Lock.ApplyHysterysis==false){
 			Alarm();				//Apply Alarm
-		}else if(ApplyHysterysis==true){
+			PrintOutputs();
+		}else if(Lock.ApplyHysterysis==true){
 			Hysterysis();			//Apply Hysterysis if applicable
+			PrintOutputs();
 		}
 	
 		}

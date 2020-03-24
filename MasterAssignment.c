@@ -11,10 +11,9 @@
 #include "MasterAssignment.h"
 
 // *** Variable Declarations ***
-s16 AdcInput,O2Conc,UpperLimit,LowerLimit;
-bool flag=true;
-bool ApplyHysterysis=false;
-u1 Status;
+struct my_struct Sensor;
+struct flags Lock;
+
 
 //###Explanation: First the buffer size and the first elements of the buffer is taken from user
 
@@ -30,25 +29,28 @@ u1 Status;
 // * NOTES :           	
 // ***********************************************************************************************
 
+
 void TakeUserInput(void){
 
-
 	printf("Enter ADC input:\n");
-	scanf("%hd",&AdcInput);
-	printf("Enter upper limit lower range:\n");
-	scanf("%hd",&UpperLimit);
-	printf("Enter lower limit upper range:\n");
-	scanf("%hd",&LowerLimit);
+	scanf("%hd",&Sensor.AdcInput);
+	
+	if(Lock.ApplyHysterysis == false){
+		printf("Enter upper limit lower range:\n");
+		scanf("%hd",&Sensor.UpperLimit);
+		printf("Enter lower limit upper range:\n");
+		scanf("%hd",&Sensor.LowerLimit);
+	}
 
 	//Wrong input handling-if user inputs values out of range
-	if(flag==true){
+	if(Lock.flag==true){
 
-	if((AdcInput>ADCMAX) || (AdcInput < ADCMIN) || (UpperLimit >O2MAX) || (LowerLimit<O2MIN) || (UpperLimit<UPPERLIMITMIN) ||(LowerLimit>LOWERLIMITMAX)){
+	if((Sensor.AdcInput>ADCMAX) || (Sensor.AdcInput < ADCMIN) || (Sensor.UpperLimit >O2MAX) || (Sensor.LowerLimit<O2MIN) || (Sensor.UpperLimit<UPPERLIMITMIN) ||(Sensor.LowerLimit>LOWERLIMITMAX)){
 		printf("Wrong Input\n");
-		flag=true;
+		Lock.flag=true;
 	}
 	else{
-		flag=false;
+		Lock.flag=false;
 	}
 
 	}
@@ -68,12 +70,12 @@ void TakeUserInput(void){
 
 void Scaling(void){
 
-	//O2Conc=((O2MAX-O2MIN)/(ADCMAX-ADCMIN))*AdcInput+O2MIN;
-	O2Conc=(ADCMAX-ADCMIN)*10;
-	O2Conc=O2Conc/AdcInput;
-	O2Conc=(((O2MAX-O2MIN)*10)/O2Conc);
+	//Sensor.O2Conc=((O2MAX-O2MIN)/(ADCMAX-ADCMIN))*Sensor.AdcInput+O2MIN;
+	Sensor.O2Conc=(ADCMAX-ADCMIN)*10;
+	Sensor.O2Conc=Sensor.O2Conc/Sensor.AdcInput;
+	Sensor.O2Conc=(((O2MAX-O2MIN)*10)/Sensor.O2Conc);
 
-	printf("O2Conc:%d\n",O2Conc);
+	printf("O2Conc:%d\n",Sensor.O2Conc);
 
 }	//Scaling
 
@@ -90,39 +92,22 @@ void Scaling(void){
 
 void Alarm(void){
 
-	if((O2Conc>=UpperLimit) && (O2Conc<=O2MAX)){
+	if((Sensor.O2Conc>=Sensor.UpperLimit) && (Sensor.O2Conc<=O2MAX)){
 		printf("Upper limit !\n");
-		Status=HIGH;
-		ApplyHysterysis=true;
+		Sensor.Status=HIGH;
+		Lock.ApplyHysterysis=true;
 
-	}else if((O2Conc>=O2MIN) && (O2Conc<=LowerLimit)){
+	}else if((Sensor.O2Conc>=O2MIN) && (Sensor.O2Conc<=Sensor.LowerLimit)){
 		printf("Lower limit !\n");
-		Status=LOW;
-		ApplyHysterysis=true;
+		Sensor.Status=LOW;
+		Lock.ApplyHysterysis=true;
 	}else{
 		printf("normal range !\n");
-		Status=NORMAL;
-		ApplyHysterysis=false;
+		Sensor.Status=NORMAL;
+		Lock.ApplyHysterysis=false;
 	}
 
-	if(Status==HIGH){
-
-		printf("Status:--HIGH--\n");	
-
-	}else if(Status==LOW){
-
-		printf("Status:--LOW--\n");
-
-	}else if (Status==NORMAL)
-	{
-		printf("Status:--NORMAL--\n");
-	}
-
-
-
-	printf("Status:%d\n",Status);
-	printf("ApplyHysterysis:%d\n",ApplyHysterysis);
-	printf("-------------------------------------------\n");
+	
 }//Alarm()
 
 // ***********************************************************************************************
@@ -138,32 +123,50 @@ void Alarm(void){
 
 void Hysterysis(void){
 
-	if((Status==HIGH) && (O2Conc<(UpperLimit-HYST))){
-		Status=NORMAL;
-		ApplyHysterysis=false;
-	}else if((Status==LOW) && (O2Conc>(LowerLimit+HYST))){
-		Status=NORMAL;
-		ApplyHysterysis=false;
+	if((Sensor.Status==HIGH) && (Sensor.O2Conc<(Sensor.UpperLimit-HYST))){
+		Sensor.Status=NORMAL;
+		Lock.ApplyHysterysis=false;
+	}else if((Sensor.Status==LOW) && (Sensor.O2Conc>(Sensor.LowerLimit+HYST))){
+		Sensor.Status=NORMAL;
+		Lock.ApplyHysterysis=false;
 	}
 
-	if(Status==HIGH){
+	
+
+}//Hysterysis()
+
+// ***********************************************************************************************
+// * Name :            	PrintOutputs
+// * Description :     	Print Status and hysterysis variables on console
+// * Called from/Freq :	called from main(), only once
+// * Inputs :			None
+// * OUTPUTS :			None
+// * RETURN :			None
+// * PROCESS :			by checking status register and hysterysis variable
+// * NOTES :           	
+// ***********************************************************************************************
+
+
+void PrintOutputs(void){
+
+	if(Sensor.Status==HIGH){
 
 		printf("Status:--HIGH--\n");	
 
-	}else if(Status==LOW){
+	}else if(Sensor.Status==LOW){
 
 		printf("Status:--LOW--\n");
 
-	}else if (Status==NORMAL)
+	}else if (Sensor.Status==NORMAL)
 	{
 		printf("Status:--NORMAL--\n");
 	}
 
-	printf("Status:%d\n",Status);
-	printf("ApplyHysterysis:%d\n",ApplyHysterysis);
+	printf("Status:%d\n",Sensor.Status);
+	printf("ApplyHysterysis:%d\n",Lock.ApplyHysterysis);
 	printf("-----------------------------------------\n");
 
 
-}//Hysterysis()
+}
 
 //[EOF]

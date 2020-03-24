@@ -12,7 +12,7 @@
 #define MATER_ASSIGNMENT_H
 
 //***Includes***
-#include<stdio.h>
+#include <stdio.h>
 #include "myboolean.h"
 #include "typedef.h"
 
@@ -20,7 +20,8 @@
 void TakeUserInput(void);
 void Scaling(void);
 void Alarm(void); 
-void Hysterysis(void);	
+void Hysterysis(void);
+void PrintOutputs(void);	
 
 
 //**Define**
@@ -35,11 +36,24 @@ void Hysterysis(void);
 #define NORMAL 1
 #define HYST 2
 //**Extern variables**
-extern s16 AdcInput,O2Conc,UpperLimit,LowerLimit;
-extern bool flag;
-extern bool ApplyHysterysis;
-extern u1 Status;
+struct my_struct
+{
+	s16 AdcInput;
+	s16 O2Conc;
+	s16 UpperLimit;
+	s16 LowerLimit;
+	u1 Status;
 
+};
+
+struct flags
+{
+	bool flag;
+	bool ApplyHysterysis;
+};
+
+extern struct my_struct Sensor;
+extern struct flags		Lock;
 
 #endif
 

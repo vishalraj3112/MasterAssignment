@@ -25,15 +25,12 @@ void PrintOutputs(void);
 
 
 //**Define**
-#define ADCMAX 1000 //24 units left for sacling
+#define ADCMAX 1000 //24 units left for scaling
 #define ADCMIN 0
 #define O2MAX 30
 #define O2MIN 0
 #define UPPERLIMITMIN 25
 #define LOWERLIMITMAX 18
-#define LOW 0
-#define HIGH 2
-#define NORMAL 1
 #define HYST 2
 //**Extern variables**
 struct my_struct
@@ -50,6 +47,12 @@ struct flags
 {
 	bool flag;
 	bool ApplyHysterysis;
+};
+
+enum state
+
+{	
+	LOW,NORMAL,HIGH
 };
 
 extern struct my_struct Sensor;

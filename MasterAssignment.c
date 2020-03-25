@@ -43,8 +43,7 @@ void TakeUserInput(void){
 	}
 
 	//Wrong input handling-if user inputs values out of range
-	if(Lock.flag==true){
-
+	
 	if((Sensor.AdcInput>ADCMAX) || (Sensor.AdcInput < ADCMIN) || (Sensor.UpperLimit >O2MAX) || (Sensor.LowerLimit<O2MIN) || (Sensor.UpperLimit<UPPERLIMITMIN) ||(Sensor.LowerLimit>LOWERLIMITMAX)){
 		printf("Wrong Input\n");
 		Lock.flag=true;
@@ -53,7 +52,6 @@ void TakeUserInput(void){
 		Lock.flag=false;
 	}
 
-	}
 
 }//Take User Input
 
@@ -101,7 +99,7 @@ void Alarm(void){
 		printf("Lower limit !\n");
 		Sensor.Status=LOW;
 		Lock.ApplyHysterysis=true;
-	}else{
+	}else if((Sensor.O2Conc>Sensor.LowerLimit) && (Sensor.O2Conc<Sensor.UpperLimit)){
 		printf("normal range !\n");
 		Sensor.Status=NORMAL;
 		Lock.ApplyHysterysis=false;

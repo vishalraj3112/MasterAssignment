@@ -66,15 +66,20 @@ void TakeUserInput(void){
 // * NOTES :           	
 // ***********************************************************************************************
 
-void Scaling(void){
+void Scaling(struct my_struct *ptr){
+	
+	(ptr->AdcInput)=Sensor.AdcInput;
+	(ptr->O2Conc)  =Sensor.O2Conc;
+	
+	ptr->O2Conc= ((O2MAX-O2MIN)/(ADCMAX-ADCMIN))*(ptr->AdcInput)+O2MIN;
+	ptr->O2Conc=(ADCMAX-ADCMIN)*10;
+	ptr->O2Conc=(ptr->O2Conc)/(ptr->AdcInput);
+	ptr->O2Conc=(((O2MAX-O2MIN)*10)/ptr->O2Conc);
 
-	//Sensor.O2Conc=((O2MAX-O2MIN)/(ADCMAX-ADCMIN))*Sensor.AdcInput+O2MIN;
-	Sensor.O2Conc=(ADCMAX-ADCMIN)*10;
-	Sensor.O2Conc=Sensor.O2Conc/Sensor.AdcInput;
-	Sensor.O2Conc=(((O2MAX-O2MIN)*10)/Sensor.O2Conc);
+	Sensor.AdcInput=(ptr->AdcInput);
+	Sensor.O2Conc  =(ptr->O2Conc)  ;
 
 	printf("O2Conc:%d\n",Sensor.O2Conc);
-
 }	//Scaling
 
 // ***********************************************************************************************

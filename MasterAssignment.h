@@ -16,14 +16,6 @@
 #include "myboolean.h"
 #include "typedef.h"
 
-//**Function prototypes***
-void TakeUserInput(void);
-void Scaling(void);
-void Alarm(void); 
-void Hysterysis(void);
-void PrintOutputs(void);	
-
-
 //**Define**
 #define ADCMAX 1000 //24 units left for scaling
 #define ADCMIN 0
@@ -32,6 +24,7 @@ void PrintOutputs(void);
 #define UPPERLIMITMIN 25
 #define LOWERLIMITMAX 18
 #define HYST 2
+
 //**Extern variables**
 struct my_struct
 {
@@ -57,6 +50,16 @@ enum state
 
 extern struct my_struct Sensor;
 extern struct flags		Lock;
+
+
+//**Function prototypes***
+void TakeUserInput(void);
+void Scaling(struct my_struct *ptr);
+void Alarm(void); 
+void Hysterysis(void);
+void PrintOutputs(void);	
+
+
 
 #endif
 

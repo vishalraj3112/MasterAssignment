@@ -10,6 +10,8 @@
 
 #include "MasterAssignment.h"
 
+struct my_struct Sensor_array[3];
+
 s32 main(void){
 
 	Lock.flag=true;				//has to be defined inside a function
@@ -19,7 +21,7 @@ s32 main(void){
 		TakeUserInput();		//Take ADC and upper and lower level inputs
 
 	if(Lock.flag==false){
-		Scaling();				//Scale ADC to percentage
+		Scaling(Sensor_array);				//Scale ADC to percentage
 
 		if(Lock.ApplyHysterysis==false){
 			Alarm();				//Apply Alarm

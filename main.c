@@ -20,14 +20,17 @@ s32 main(void){
 	while(1){
 		TakeUserInput();		//Take ADC and upper and lower level inputs
 
-	if(Lock.flag==false){
+	if(Lock.flag==false){		//this is for checking wether the given user input is valid ,if yes, then Lock.flag remains false
 		Scaling(Sensor_array);				//Scale ADC to percentage
 
-		if(Lock.ApplyHysterysis==false){
+		if(Lock.ApplyHysterysis==false){//this is meant for checking weather based on the given input, hysterysis need
+										//to be applied or not, if input is in any of the bands(upper or lower) then hysterysis
+										//is applied otherwise not applied.	
 			Alarm();				//Apply Alarm
 			PrintOutputs();
 		}else if(Lock.ApplyHysterysis==true){
-			Hysterysis();			//Apply Hysterysis if applicable
+			Hysterysis();			//Apply Hysterysis if applicable and input in upper or lower band and used to exit
+									//hysterysis.
 			PrintOutputs();
 		}
 	
